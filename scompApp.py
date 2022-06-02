@@ -1,3 +1,4 @@
+# Importing the libraries and packages
 import streamlit as st  
 from textblob import TextBlob
 from gingerit.gingerit import GingerIt
@@ -33,27 +34,31 @@ def analyze_token_sentiment(docx):
 	return result 
 
 def main():
-    st.title("Nizar's Soft Computing Assignment")
-    st.write("Hello, in this web app created by Nizar is to achieve 2 goals or objectives of his Assignment. To determine a sentence is positive or negative and to examine wheter the grammar of the sentence is correct")
-
-    menu = ["Sentiment Analysis", "DIY-Grammarly"]
+    menu = ["Home","Sentiment Analysis", "DIY-Grammarly"]
     choice = st.sidebar.selectbox("Menu", menu)
 
-    if choice == "Sentiment Analysis": # for the positive or negative sentence
-        st.subheader("Sentiment Analysis")
+    if choice == "Home": # Home page for introduction to the website
+        st.title("Nizar's Soft Computing Assignment")
+        st.subheader("Hello, in this web app created by Mohamad Nizar Mustaqeem (17206540) for his WIX3001 Individual Assignment")
+        st.subheader("Objectives : ")
+        st.write("To determine a sentence is positive or negative")
+        st.write("To examine whether grammar of the sentence is correct")
+
+    elif choice == "Sentiment Analysis": # for the positive or negative sentence
+        st.title("Sentiment Analysis")
+        st.write("To clarify some things, Polarity refers to the strength of an opinion. It could be positive or negative. Meanwhile, Subjectivity refers to the degree to which a person is personally involved in an object. What matters the most here are personal connections and individual experiences with that object, which may or may not differ from someone else’s point of view.")
         with st.form(key = 'nlpForm'):
             raw_text = st.text_area("Enter your sentence here")
             submit_button = st.form_submit_button(label = 'Analyze')
 
-            # layout
+            #Layout
             col1,col2 = st.columns(2)
             if submit_button:
                 with col1:
                     st.info("Results")
                     sentiment = TextBlob(raw_text).sentiment
-                    #st.write(sentiment)
 
-                    # emoji
+                    # Emoji for the results
                     if sentiment.polarity > 0:
                         st.markdown("The sentence is Positive :smiley: ")
                     elif sentiment.polarity < 0:
@@ -66,7 +71,7 @@ def main():
                     result_df = convert_to_df(sentiment)
                     st.dataframe(result_df)
 
-                    # Visualization
+                    # Visualization of polarity and subjectivity 
                     c = alt.Chart(result_df).mark_bar().encode(
                         x='metric',
                         y='value',
@@ -79,8 +84,10 @@ def main():
                     token_sentiments = analyze_token_sentiment(raw_text)
                     st.write(token_sentiments)
 
+    # The grammar corrector
     elif choice == "DIY-Grammarly":
-        st.subheader("DIY-Grammarly")
+        st.title("DIY-Grammarly")
+        st.write("This is where you will enter a text, try to enter a sentence that has a grammatical error. It will tell you whether it is correct and give and output of the corrected sentence")
 
         text = st.text_area("Enter Text:", value='', height=None, max_chars=None, key=None)
         parser = GingerIt()
@@ -88,8 +95,13 @@ def main():
             if text == '':
                 st.write('Please enter text for checking') 
             else: 
+                if text == str(result_dict["result"]):
+                    st.write("The grammar for this sentence is CORRECT ✅")
+                else:
+                    st.write("The grammar for this sentence in INCORRECT ⛔")
                 result_dict = parser.parse(text)
-                st.markdown('**Corrected Sentence - **' + str(result_dict["result"]))
+                st.markdown('**Corrected Sentence - ** ' + str(result_dict["result"]))
+
         else: pass
 
 if __name__ == '__main__':
