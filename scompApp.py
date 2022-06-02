@@ -6,8 +6,6 @@ import pandas as pd
 import altair as alt
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
-
-# 
 def convert_to_df(sentiment):
     sentiment_dict = {'polarity':sentiment.polarity,'subjectivity':sentiment.subjectivity}
     sentiment_df = pd.DataFrame(sentiment_dict.items(),columns=['metric','value'])
@@ -84,8 +82,7 @@ def main():
                     token_sentiments = analyze_token_sentiment(raw_text)
                     st.write(token_sentiments)
 
-    # The grammar corrector
-    elif choice == "DIY-Grammarly":
+    elif choice == "DIY-Grammarly": # Grammar checker
         st.title("DIY-Grammarly")
         st.write("This is where you will enter a text, try to enter a sentence that has a grammatical error. It will tell you whether it is correct and give and output of the corrected sentence")
 
@@ -95,15 +92,13 @@ def main():
             if text == '':
                 st.write('Please enter text for checking') 
             else: 
-		result_dict = parser.parse(text)
-		st.markdown('**Corrected Sentence - ** ' + str(result_dict["result"]))
-		
+                result_dict = parser.parse(text)
+                st.markdown('**Corrected Sentence - ** ' + str(result_dict["result"]))
                 if text == str(result_dict["result"]):
                     st.write("The grammar for this sentence is CORRECT ✅")
                 else:
                     st.write("The grammar for this sentence in INCORRECT ⛔")
-
-        else: pass
+    else: pass
 
 if __name__ == '__main__':
     main()
