@@ -96,12 +96,12 @@ def main():
                 st.write('Please enter text for checking') 
             else: 
 		result_dict = parser.parse(text)
+		st.markdown('**Corrected Sentence - ** ' + str(result_dict["result"]))
+		
                 if text == str(result_dict["result"]):
                     st.write("The grammar for this sentence is CORRECT ✅")
                 else:
                     st.write("The grammar for this sentence in INCORRECT ⛔")
-            
-                st.markdown('**Corrected Sentence - ** ' + str(result_dict["result"]))
 
         else: pass
 
